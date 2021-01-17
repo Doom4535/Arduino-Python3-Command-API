@@ -121,10 +121,13 @@ void ToneNo(String data){
 }
 
 void DigitalHandler(int mode, String data){
-      int pin = Str2int(data);
+    int pin = Str2int(data);
     if(mode<=0){ //read
+      //Serial.println("FooBar");
         Serial.println(digitalRead(pin));
-    }else{
+    }
+    else{
+        //Serial.println("GotHere");
         if(pin <0){
             digitalWrite(-pin,LOW);
         }else{
@@ -318,15 +321,20 @@ void EEPROMHandler(int mode, String data) {
 }
 
 void SerialParser(void) {
-  char readChar[64];
+  char readChar[64]={0x0};
   Serial.readBytesUntil(33,readChar,64);
   String read_ = String(readChar);
-  //Serial.println(readChar);
+  //Serial.println(read_);
+  // example '%dr6$!'
+  // example '%pm4$!%dw4$!'
+  // example '%pm4$!%dw4$!%dw-4$!%dw4$!%dw-4$!%dw4$!%dw-4$!%dw4$!%dw-4$!'
+  // example '%dr6$!'
   int idx1 = read_.indexOf('%');
   int idx2 = read_.indexOf('$');
   // separate command from associated data
-  String cmd = read_.substring(1,idx1);
-  String data = read_.substring(idx1+1,idx2);
+  if ((idx1 < 0) || (idx2 < 0)) return;
+  String cmd = read_.substring(idx1+1, idx1+3);
+  String data = read_.substring(idx1+3,idx2);
 
   // determine command sent
   if (cmd == "dw") {
