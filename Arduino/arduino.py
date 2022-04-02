@@ -216,6 +216,25 @@ class Arduino(object):
             return int(rd)
         except:
             return 0
+        
+    def coreTemp(self):
+        """
+        Returns the core temp in degrees Celsius
+        (if supported by the chip).
+        returns:
+           value: string float with unit at end
+        """
+        cmd_str = build_cmd_str("ct", (0,))
+        try:
+            self.sr.write(str.encode(cmd_str))
+            self.sr.flush()
+        except:
+            pass
+        rd = self.sr.readline().decode("utf-8").replace("\r\n", "")
+        try:
+            return str(rd)
+        except:
+            return 0
 
     def pinMode(self, pin, val):
         """
