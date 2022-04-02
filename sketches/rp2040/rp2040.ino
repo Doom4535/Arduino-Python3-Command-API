@@ -36,8 +36,8 @@ void split(String results[], int len, String input, char spChar) {
 void CT_read() {
   //Serial.println(analogRead(pin));
   //Serial.println(analogReadTemp());
-  Serial.printf("%fC\n", analogReadTemp());
-  //Serial.printf("Core temperature: %2.1fC\n", analogReadTemp());\n
+  Serial.println("%fC", analogReadTemp());
+  //Serial.println("Core temperature: %2.1fC", analogReadTemp());
 }
 
 // TODO: NeoPixel Library
