@@ -42,10 +42,11 @@ def build_cmd_str(cmd, args=None):
 
     Input:
         cmd (str): the command to send to the arduino, must not
-            contain a % character
+            contain a '@', '%', '!', or '$' character
         args (iterable): the arguments to send to the command
 
     @TODO: a strategy is needed to escape % characters in the args
+    @TODO: a method of creating checksum is needed (preferably with ECC)
     """
     if args:
         args = '%'.join(map(str, args))

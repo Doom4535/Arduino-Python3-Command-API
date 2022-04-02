@@ -325,16 +325,23 @@ void SerialParser(void) {
   Serial.readBytesUntil(33,readChar,64);
   String read_ = String(readChar);
   //Serial.println(read_);
-  // example '%dr6$!'
-  // example '%pm4$!%dw4$!'
-  // example '%pm4$!%dw4$!%dw-4$!%dw4$!%dw-4$!%dw4$!%dw-4$!%dw4$!%dw-4$!'
-  // example '%dr6$!'
-  int idx1 = read_.indexOf('%');
-  int idx2 = read_.indexOf('$');
+  // TODO ex '@<cmd>%<val>$<chksum>!'
+  // example '@<cmd>%<val>$!'
+  // example '@dr%6$!'
+  // example '@pm%4$!@dw%4$!'
+  // example '@pm%4$!@dw%4$!@dw%-4$!@dw%4$!@dw%-4$!@dw%4$!@dw%-4$!@dw%4$!@dw%-4$!'
+  // example '@dr%6$!'
+  int idx1 = read_.indexOf('@');
+  int idx2 = read_.indexOf('%');
+  int idx3 = read_.indexOf('$');
+  //int idx4 = read_.indexOf('!');
+  //Serial.println("idx1(@):\"" + idx1 + "\" " + "idx2(%):\"" + idx2 +
+  //  "\" " + "idx3($):\"" + idx3 + "\" " + "idx4(!):\"" + idx4 + "\" ")
   // separate command from associated data
   if ((idx1 < 0) || (idx2 < 0)) return;
-  String cmd = read_.substring(idx1+1, idx1+3);
-  String data = read_.substring(idx1+3,idx2);
+  String cmd = read_.substring(idx1+1, idx2);
+  String data = read_.substring(idx2+1, idx3);
+  //String chksum = read_.substring(idx3+1, idx4);
 
   // determine command sent
   if (cmd == "dw") {
