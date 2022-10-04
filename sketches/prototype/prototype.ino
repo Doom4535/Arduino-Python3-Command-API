@@ -3,6 +3,14 @@
 #include <Servo.h>
 #include <EEPROM.h>
 
+// Used to set USB ID's; these can be then configured to
+// mount the device to a specific serial port or other usage
+// in the kernel
+//#define USB_VID /*value of build.vid*/
+//#define USB_PID /*value of build.pid*/
+//#define USB_MANUFACTURER /*value of build.usb_manufacturer*/
+//#define USB_PRODUCT /*value of build.usb_product*/
+
 void Version(){
   Serial.println(F("V0.6"));
 }
