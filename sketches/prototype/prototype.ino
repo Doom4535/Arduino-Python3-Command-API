@@ -11,6 +11,13 @@
 //#define USB_MANUFACTURER /*value of build.usb_manufacturer*/
 //#define USB_PRODUCT /*value of build.usb_product*/
 
+// Additionally, one can grab the USB serial number
+// (if the devices use unique serial numbers), and change the
+// mount point using it as well
+// See: http://hintshop.ludvig.co.nz/show/persistent-names-usb-serial-devices/
+// And an example of the import udev rules line (eg: 99-usb-serial.rules):
+// ATTRS{idProduct}=="6001", ATTRS{serial}=="A7004IXj", SYMLINK+="buspirate"
+
 void Version(){
   Serial.println(F("V0.6"));
 }
