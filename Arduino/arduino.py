@@ -177,7 +177,15 @@ class Arduino(object):
         self.SoftwareSerial = SoftwareSerial(self)
         self.Servos = Servos(self)
         self.EEPROM = EEPROM(self)
-        self.pinModeDic = {}
+        self.pmd = {}
+
+    def pinModeTracker(self, key, value=None):
+        if not value == None:
+                self.pmd[key] = value
+        try:
+            return self.pmd[key]
+        except KeyError:
+                raise KeyError(f'Pin {key} has not been initialised')
 
     def version(self):
         return get_version(self.sr)
@@ -194,7 +202,7 @@ class Arduino(object):
         pin = int(pin)
         val = str(val).upper()
         valid = ('HIGH','LOW')
-        if not self.pinModeDic[pin] == 'OUTPUT':
+        if not self.pinModeTracker(pin) == 'OUTPUT':
             raise ValueError(f'pin: {pin} not set to OUTPUT')
         if val in valid:
             if val == "LOW":
@@ -217,7 +225,7 @@ class Arduino(object):
         """
         pin = int(pin)
         val = int(val)
-        if not self.pinModeDic[pin] == 'OUTPUT':
+        if not self.pinModeTracker(pin) == 'OUTPUT':
             raise ValueError(f'pin: {pin} not set to OUTPUT')
         else:
             if val > 255:
@@ -262,7 +270,7 @@ class Arduino(object):
                 pin_ = -16384-pin
             else:
                 pin_ = pin
-            self.pinModeDic[pin] = val
+            self.pinModeTracker(pin, value=val) 
             cmd_str = build_cmd_str("pm", (pin_,))
             write_and_flush(self.sr,cmd_str)
         else:
@@ -280,7 +288,7 @@ class Arduino(object):
         pin = int(pin)
         val = str(val).upper()
         valid = ('LOW', 'HIGH')
-        if not self.pinModeDic[pin] == 'INPUT':
+        if not self.pinModeTracker(pin) == 'INPUT':
             raise ValueError(f'pin: {pin} not set to INPUT')
         if not val in valid:
             raise ValueError(f'val: {str(val).upper()} not in {valid}')
@@ -328,7 +336,7 @@ class Arduino(object):
         pin = int(pin)
         val = str(val).upper()
         numtrials = int(numtrials)
-        if not self.pinModeDic[pin] == 'OUTPUT':
+        if not self.pinModeTracker(pin) == 'OUTPUT':
             if val == "LOW":
                 pin_ = -pin
             else:
@@ -366,7 +374,7 @@ class Arduino(object):
            value: 0 for "LOW", 1 for "HIGH"
         """
         pin = int(pin)
-        if not self.pinModeDic[pin] == 'INPUT':
+        if not self.pinModeTracker(pin) == 'INPUT':
             raise ValueError(f'pin: {pin} not set to INPUT')
         else:
             cmd_str = build_cmd_str("dr", (pin,))
@@ -394,7 +402,7 @@ class Arduino(object):
         trouble during testing
         """
         pin = int(pin)
-        if not self.pinModeDic[pin] == 'OUTPUT':
+        if not self.pinModeTracker(pin) == 'OUTPUT':
                 raise ValueError(f'pin: {pin} not initialised to OUTPUT')
         else:
             NOTES = dict(
