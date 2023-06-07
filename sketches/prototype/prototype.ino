@@ -152,7 +152,9 @@ void AnalogHandler(int mode, String data){
 
 void ConfigurePinHandler(String data){
     int pin = Str2int(data);
-    if(pin <=0){
+    if (pin <=16384) { // Arduino ints are 16 bit, so by using the range between -16384 and -32767 we can easily implement INPUT_PULLUP
+        pinMode(-pin + 16384, INPUT_PULLUP);
+    }else if(pin <=0){
         pinMode(-pin,INPUT);
     }else{
         pinMode(pin,OUTPUT);
