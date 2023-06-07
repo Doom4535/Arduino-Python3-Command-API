@@ -151,7 +151,7 @@ class Arduino(object):
             if not port:
                 sr = find_port(baud, timeout)
                 if not sr:
-                    raise ValueError("Could not find port.")
+                    raise ValueError("Could not find port. Check the connection and the baud.")
             else:
                 sr = serial.Serial(port, baud, timeout=timeout)
                 sr.readline() # wait til board has rebooted and is connected
@@ -195,7 +195,7 @@ class Arduino(object):
         val = str(val).upper()
         valid = ('HIGH','LOW')
         if not self.pinModeDic[pin] == 'OUTPUT':
-            raise ValueError('pin: {} not set to OUTPUT'.format(pin))
+            raise ValueError(f'pin: {pin} not set to OUTPUT')
         if val in valid:
             if val == "LOW":
                 pin_ = -pin
@@ -204,7 +204,7 @@ class Arduino(object):
             cmd_str = build_cmd_str("dw", (pin_,))
             write_and_flush(self.sr,cmd_str)
         else:
-            raise ValueError('val: {} not in {}'.format(str(val).upper(), str(valid)))
+            raise ValueError(f'val: {str(val).upper()} not in {str(valid)}')
 
     def analogWrite(self, pin, val):
         """
@@ -367,7 +367,7 @@ class Arduino(object):
         """
         pin = int(pin)
         if not self.pinModeDic[pin] == 'INPUT':
-            raise ValueError('pin: {} not set to INPUT'.format(pin))
+            raise ValueError(f'pin: {pin} not set to INPUT')
         else:
             cmd_str = build_cmd_str("dr", (pin,))
             write_and_flush(self.sr,cmd_str)          
@@ -472,11 +472,11 @@ class Arduino(object):
             write_and_flush(self.sr, cmd_str, raise_error=True)
         else:
             if not self.pinModeDic[dataPin] == 'OUTPUT':
-                raise ValueError('pin: {} not initialised to OUTPUT'.format(dataPin))
+                raise ValueError(f'pin: {dataPin} not initialised to OUTPUT')
             if not self.pinModeDic[clockPin] == 'OUTPUT':
-                raise ValueError('pin: {} not initialised to OUTPUT'.format(clockPin))
+                raise ValueError(f'pin: {clockPin} not initialised to OUTPUT')
             if not pinOrder.upper() in valid:
-                raise ValueError('pinOrder: {} not in {}'.format(str(pinOrder).upper(), valid))
+                raise ValueError(f'pinOrder: {str(pinOrder).upper()} not in {valid}')
 
     def shiftIn(self, dataPin, clockPin, pinOrder):
         """
@@ -505,7 +505,7 @@ class Arduino(object):
                 raise ValueError(f'pin: {dataPin} not initialised to OUTPUT')
             if not self.pinModeDic[clockPin] == 'OUTPUT':
                 raise ValueError(f'pin: {clockPin} not initialised to OUTPUT')
-            if not pinOrder in valid.upper():
+            if not pinOrder.upper() in valid:
                 raise ValueError(f'pinOrder: {str(pinOrder).upper()} not in {valid}')
 
 
