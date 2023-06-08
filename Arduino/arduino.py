@@ -575,8 +575,7 @@ class Servos(object):
     def writeMicroseconds(self, pin, uS):
         position = self.servo_pos[pin]
         cmd_str = build_cmd_str("svwm", (position, uS))
-
-       write_and_flush(self.sr,cmd_str,raise_errors=True)
+        write_and_flush(self.sr,cmd_str,raise_errors=True)
 
     def read(self, pin):
         if pin not in self.servo_pos.keys():
